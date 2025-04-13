@@ -5,21 +5,26 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     const reader = new FileReader();
     
     reader.onload = function(event) {
-        const lineas = event.target.result.split('\n');
-        datosCalendario.clear();
-        
-        lineas.forEach(linea => {
-            const [fecha, turnos] = linea.split(':').map(i => i.trim());
-            if(fecha && turnos) datosCalendario.set(fecha, turnos);
-        });
-        
-        const fechas = Array.from(datosCalendario.keys());
-        if(fechas.length > 0) {
-            const primeraFecha = parseFecha(fechas[0]);
-            const ultimaFecha = parseFecha(fechas[fechas.length-1]);
+        try {
+            const lineas = event.target.result.split('\n');
+            datosCalendario.clear();
             
-            document.getElementById('startDate').value = formatFechaInput(primeraFecha);
-            document.getElementById('endDate').value = formatFechaInput(ultimaFecha);
+            lineas.forEach(linea => {
+                const [fecha, turnos] = linea.split(':').map(i => i.trim());
+                if(fecha && turnos) datosCalendario.set(fecha, turnos);
+            });
+            
+            const fechas = Array.from(datosCalendario.keys());
+            if(fechas.length > 0) {
+                const primeraFecha = parseFecha(fechas[0]);
+                const ultimaFecha = parseFecha(fechas[fechas.length-1]);
+                
+                document.getElementById('startDate').value = formatFechaInput(primeraFecha);
+                document.getElementById('endDate').value = formatFechaInput(ultimaFecha);
+            }
+        } catch (error) {
+            console.error("Error procesando archivo:", error);
+            alert(`Error: ${error.message}`);
         }
     };
     
@@ -73,7 +78,7 @@ function crearDiaElemento(date, start, end) {
     const fechaStr = formatFecha(date);
     
     dia.innerHTML = `
-        <div class="numero-dia">${date.getDate()}</div>
+        <div class="numero-dia">${formatFechaDia(date)}</div>
         ${dentroRango ? generarTurnos(fechaStr) : ''}
     `;
     
@@ -105,9 +110,19 @@ function obtenerEstadoTurno(letra, turnos) {
     const match = turnos.match(regex);
     
     if(!match) return 'inactivo';
-    return match[0] === letra ? 'activo' : 'minuscula';
+    const coincidenciaExacta = match.some(m => m === letra);
+    return coincidenciaExacta ? 'activo' : 'minuscula';
 }
 
+// Nueva función para formato dd/mm/aa
+function formatFechaDia(date) {
+    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const y = String(date.getFullYear()).slice(2);
+    return `${d}/${m}/${y}`;
+}
+
+// Función original para formato dd-mm-aaaa (necesaria para el parseo)
 function formatFecha(date) {
     const d = String(date.getDate()).padStart(2, '0');
     const m = String(date.getMonth() + 1).padStart(2, '0');
