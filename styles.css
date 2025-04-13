@@ -1,0 +1,238 @@
+/* ESTILOS GENERALES */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* CONTROLES SUPERIORES */
+.controles {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.controles input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* CONTENEDOR PRINCIPAL DEL CALENDARIO */
+.calendario-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* CABECERA DÍAS DE LA SEMANA */
+.dias-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding: 15px 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-bottom: 2px solid #ddd;
+}
+
+/* CONTENEDOR DE SEMANAS */
+.semanas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* FILA DE SEMANA */
+.semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.semana:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+/* CELDA DÍA */
+.dia {
+    position: relative;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    min-height: 100px;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.3s;
+    margin: 2px;
+}
+
+.dia:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+/* NÚMERO DEL DÍA */
+.numero-dia {
+    font-weight: bold;
+    padding: 8px;
+    color: #333;
+    background: rgba(255,255,255,0.8);
+    border-radius: 4px 4px 0 0;
+    margin-bottom: auto;
+}
+
+/* CONTENEDOR DE TURNOS */
+.turnos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(255,255,255,0.9);
+    border-top: 1px solid #eee;
+}
+
+/* ESTILOS BASE DE TURNOS */
+.turno {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s;
+    background-color: white;
+    border: 1px solid #eee;
+    position: relative;
+}
+
+/* TURNOS ACTIVOS */
+.turno[data-persona="P"] { 
+    background-color: #ff99cc; 
+    border-color: #ff99cc;
+    color: #333; 
+}
+
+.turno[data-persona="R"] { 
+    background-color: #ffff66; 
+    border-color: #ffff66;
+    color: #333; 
+}
+
+.turno[data-persona="M"] { 
+    background-color: #99ff99; 
+    border-color: #99ff99;
+    color: #333; 
+}
+
+/* TURNOS NO PRESENTES (DEFAULT) */
+.turno:not([data-persona]) {
+    background-color: white;
+    border: 1px solid #eee;
+}
+
+/* TURNOS INACTIVOS */
+.turno.inactivo {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #e0e0e0 !important;
+    border-color: #e0e0e0 !important;
+    color: #666 !important;
+}
+
+/* TURNOS MINÚSCULAS (CON LETRA Y ASPA) */
+.turno.minuscula {
+    background-color: white !important;
+    border: 1px solid #eee !important;
+    color: #333 !important;
+}
+
+.turno.minuscula::before,
+.turno.minuscula::after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 1.5px;
+    background-color: black;
+    top: 50%;
+    left: 10%;
+}
+
+.turno.minuscula::before {
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.turno.minuscula::after {
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+    .dia {
+        min-height: 80px;
+    }
+    
+    .turno {
+        height: 20px;
+        font-size: 11px;
+    }
+    
+    .numero-dia {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controles {
+        flex-direction: column;
+    }
+    
+    .dias-semana div {
+        font-size: 13px;
+    }
+    
+    .dia {
+        min-height: 70px;
+    }
+}
+
